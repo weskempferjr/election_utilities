@@ -142,6 +142,9 @@ class Election_Utilities {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-file-uploader.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-category-dropdown-generator.php';
+
+
 
 
 		$this->loader = new Election_Utilities_Loader();

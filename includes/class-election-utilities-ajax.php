@@ -41,6 +41,21 @@ class Election_Utilities_Ajax_Controller
                     }
                     break;
 
+                case 'upload_questionnaire_responses';
+
+	                if ( !isset( $_REQUEST['parentID'] ) ) {
+		                throw new Exception(_e('Invalid get category dropdown request', ELECTION_UTILITIES_TEXTDOMAIN ) );
+	                }
+
+	                break;
+
+	            case 'get_child_category_dropdown':
+		            if ( !isset( $_REQUEST['parentID'] ) || !isset( $_FILES )  ) {
+			            throw new Exception(_e('Invalid get category dropdown request', ELECTION_UTILITIES_TEXTDOMAIN ) );
+		            }
+
+					$output = $this->get_child_category_dropdown( $_REQUEST['parentID'] );
+                    break;
 
                 default:
                     $output = __('Unknown ajax request sent from client.', ELECTION_UTILITIES_TEXTDOMAIN );
@@ -92,6 +107,21 @@ class Election_Utilities_Ajax_Controller
 		// TODO: seurity checks
 		$uploader = new File_Uploader( $data );
 		return $uploader->handle_upload();
+    }
+
+    private function get_child_category_dropdown ( $parentID ) {
+
+		// Sanitize
+		$cat_id = intval( $parentID);
+
+		$dropdown_generator = new Category_Dropdown_Generator();
+		$dropdown = $dropdown_generator->get_child_categories( $cat_id, 1);
+		return $dropdown ;
+
+    }
+
+    private function upload_questionnaire_responses() {
+
     }
 
 

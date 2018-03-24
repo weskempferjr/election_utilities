@@ -171,25 +171,18 @@ class Election_Utilities_Settings
 
         <div class="questionnaire-upload-container">
             <h3><?php _e('Upload Candidate Questionnaire Responses', ELECTION_UTILITIES_TEXTDOMAIN) ; ?></h3>
-            <?php
-                $root_term = term_exists( 'Voter Guide Root', 'category', 0);
-                if ( $root_term ) {
-	                $root_cat = $root_term['term_id'];
-	                /*
-	                $election_categories = get_term_children( $root_cat, 'category');
-                    foreach ( $election_categories as $cat_id) {
-                        $term = get_term( $cat_id, 'category' );
-                    }
-	                $x = 1;
-	                */
-	               wp_dropdown_categories( array(
-	                       'hide_empty' => 0,
-                            'child_of' => $root_cat,
-                            'hierarchical' => true,
-                            'depth' => 1
-                   ) );
-                }
-            ?>
+            <div id="election-dropdown-container" class="eu-dropdown-container">
+	            <?php
+	            $root_term = term_exists( 'Voter Guide Root', 'category', 0);
+	            if ( $root_term ) {
+		            $root_cat = $root_term['term_id'];
+
+		            $dropdown_generator = new Category_Dropdown_Generator();
+		            echo $dropdown_generator->get_child_categories( $root_cat, 1, 'election-dropdown' );
+	            }
+	            ?>
+            </div>
+        <div id="office-dropdown-container" class="eu-dropdown-container">
         </div>
         <?php
 

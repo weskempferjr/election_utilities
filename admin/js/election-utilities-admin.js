@@ -11,8 +11,15 @@
             });
         });
 
+        $('#election-dropdown').click( function( event ) {
+            var catID = $('#election-dropdown').val();
+            getCategoryDropDown( catID, '#office-dropdown-container' );
+        });
+
         $('#category_file_input').on('change', prepareUpload);
         $('.category-upload-button').click( doUpload );
+
+
 
         var file;
         var parent;
@@ -66,6 +73,39 @@
             });
 
         }
+
+        function getCategoryDropDown( parentID, targetContainer ) {
+            $.ajax({
+                url: wpNg.config.ajaxUrl,
+                type: 'POST',
+                data:{
+                    'action':'election_utilities_ajax',
+                    'fn':'get_child_category_dropdown',
+                    'parentID' : parentID,
+                },
+                dataType: 'json',
+                success: function(data, textStatus, jqXHR) {
+
+                    if ( data.errorData != null && data.errorData == 'true' ) {
+                        add_message('Could not retreive child category dropdown', 'danger');
+                    }
+
+                    displayDropdown( data, targetContainer);
+
+                },
+                error: function(errorThrown){
+                    add_message('File upload failed because of an exception', 'danger');
+                    console.log(errorThrown);
+                }
+
+            });
+        }
+
+        function displayDropdown ( dropdownHTML, targetContainer ) {
+            $( targetContainer).html( dropdownHTML);
+        }
+
+
 
         function add_message($msg, $type){
             var html = "<div class='alert alert-"+$type+"'>" + $msg + "</div>";
