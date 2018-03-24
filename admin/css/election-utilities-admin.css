@@ -1,0 +1,26 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.alert {
+    display:block;
+    width:100%;
+    padding:.25em .5em;
+    font-size:1.25em;
+    text-align: center;
+    color:white;
+    border-radius: 3px;
+}
+
+.alert-success {
+    background-color:green;
+}
+
+.alert-danger {
+    background-color:red;
+}
+
+.alert-info {
+    color: #000000;
+}
