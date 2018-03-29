@@ -62,6 +62,8 @@ class Election_Utilities_Settings
             'election_utilities-settings-page'
         );
 
+        /*
+         * Place holder for actual settings when they are needed.
         add_settings_field(
             'publication_name',
             __( 'Name of publication', ELECTION_UTILITIES_TEXTDOMAIN ),
@@ -69,6 +71,7 @@ class Election_Utilities_Settings
             'election_utilities-settings-page',
             'election_utilities-settings-general-section'
         );
+        */
 
 
     }
@@ -79,7 +82,7 @@ class Election_Utilities_Settings
      * @since 0.0.1
      */
     public function section_general_render () {
-        echo '<p>' . __("Settings for Election Utilities", ELECTION_UTILITIES_TEXTDOMAIN) . '</p>';
+        // echo '<p>' . __("Settings for Election Utilities", ELECTION_UTILITIES_TEXTDOMAIN) . '</p>';
     }
 
     public function section_publish_render () {
@@ -144,13 +147,13 @@ class Election_Utilities_Settings
                 <div id="election_utilities-settings-container">
                     <?php
 
-                    settings_fields( 'election_utilities-settings-group' );
+                    // settings_fields( 'election_utilities-settings-group' );
                     do_settings_sections( 'election_utilities-settings-page' );
 
                     ?>
 
                     <?php
-                    submit_button();
+                    // submit_button();
                     ?>
                 </div>
                 <div id="election_utilities-settings-info-container">
@@ -162,7 +165,7 @@ class Election_Utilities_Settings
         </div>
         <div class="category_upload_message"></div>
         <div id="category_file_upload" class="file-upload">
-            <h3><?php _e('Upload Election Categories', ELECTION_UTILITIES_TEXTDOMAIN) ; ?></h3>
+            <h4><?php _e('Upload Election Categories', ELECTION_UTILITIES_TEXTDOMAIN) ; ?></h4>
             <p><?php  _e('Choose a CSV file containing election categories and then click the Upload button.', ELECTION_UTILITIES_TEXTDOMAIN) ;?></p>
             <input type="file" id="category_file_input" />
             <a class="button button-secondary category-upload-button" disabled>Upload</a>
@@ -170,7 +173,7 @@ class Election_Utilities_Settings
 
 
         <div class="questionnaire-upload-container">
-            <h3><?php _e('Upload Candidate Questionnaire Responses', ELECTION_UTILITIES_TEXTDOMAIN) ; ?></h3>
+            <h4><?php _e('Upload Candidate Questionnaire Responses', ELECTION_UTILITIES_TEXTDOMAIN) ; ?></h4>
             <div id="election-dropdown-container" class="eu-dropdown-container">
 	            <?php
 	            $root_term = term_exists( 'Voter Guide Root', 'category', 0);
