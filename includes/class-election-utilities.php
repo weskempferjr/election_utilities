@@ -79,6 +79,8 @@ class Election_Utilities {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
+		$this->register_shortcodes();
+
 	}
 
 	/**
@@ -150,7 +152,7 @@ class Election_Utilities {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-personal-info-manager.php';
 
-
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-election-utilities-shortcodes.php';
 
 
 		$this->loader = new Election_Utilities_Loader();
@@ -257,6 +259,15 @@ class Election_Utilities {
 	 */
 	public function get_version() {
 		return $this->version;
+	}
+
+
+
+	private function register_shortcodes() {
+
+		$pad_shortcodes = new Election_Utilities_Shortcodes();
+		$pad_shortcodes->register();
+
 	}
 
 }
