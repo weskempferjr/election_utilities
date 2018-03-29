@@ -43,14 +43,27 @@ class Election_Utilities_Ajax_Controller
 
                 case 'upload_questionnaire_responses';
 
-	                if ( !isset( $_REQUEST['parentID'] ) ) {
+	                if ( !isset( $_REQUEST['parentID'] ) || !isset( $_FILES ) ) {
 		                throw new Exception(_e('Invalid get category dropdown request', ELECTION_UTILITIES_TEXTDOMAIN ) );
+	                }
+
+	                $posted_data =  isset( $_POST ) ? $_POST : array();
+	                $file_data = isset( $_FILES ) ? $_FILES : array();
+
+	                $raw_data = array_merge( $posted_data, $file_data );
+	                $data = $this->sanitize_data( $raw_data );
+
+
+	                $output = $this->upload_questionnaire_responses( $data );
+
+	                if ( $output === false ) {
+		                throw new Exception(__('Error uploading categories.', ELECTION_UTILITIES_TEXTDOMAIN ) );
 	                }
 
 	                break;
 
 	            case 'get_child_category_dropdown':
-		            if ( !isset( $_REQUEST['parentID'] ) || !isset( $_FILES )  ) {
+		            if ( !isset( $_REQUEST['parentID'] )   ) {
 			            throw new Exception(_e('Invalid get category dropdown request', ELECTION_UTILITIES_TEXTDOMAIN ) );
 		            }
 
@@ -105,7 +118,7 @@ class Election_Utilities_Ajax_Controller
     private function upload_categories( $data ) {
 
 		// TODO: seurity checks
-		$uploader = new File_Uploader( $data );
+		$uploader = new Election_Category_Uploader( $data );
 		return $uploader->handle_upload();
     }
 
@@ -115,13 +128,14 @@ class Election_Utilities_Ajax_Controller
 		$cat_id = intval( $parentID);
 
 		$dropdown_generator = new Category_Dropdown_Generator();
-		$dropdown = $dropdown_generator->get_child_categories( $cat_id, 1);
+		$dropdown = $dropdown_generator->get_child_categories( $cat_id, 1, 'office-dropdown');
 		return $dropdown ;
 
     }
 
-    private function upload_questionnaire_responses() {
-
+    private function upload_questionnaire_responses( $data ) {
+		$uploader = new Response_Uploader( $data );
+		return $uploader->handle_upload();
     }
 
 

@@ -144,6 +144,12 @@ class Election_Utilities {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-category-dropdown-generator.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-election-utilities-election-category-uploader.php';
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-election-utilities-response-uploader.php';
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-personal-info-manager.php';
+
 
 
 

@@ -182,8 +182,19 @@ class Election_Utilities_Settings
 	            }
 	            ?>
             </div>
-        <div id="office-dropdown-container" class="eu-dropdown-container">
+            <div id="office-dropdown-container" class="eu-dropdown-container">
+            </div>
+
+            <div class="response-upload-message"></div>
+            <div id="response-file-upload" class="file-upload">
+                <p><?php  _e('Choose a CSV file containing questionnaire responses and then click the Upload button.', ELECTION_UTILITIES_TEXTDOMAIN) ;?></p>
+                <input type="file" id="response-file-input" />
+                <a class="button button-secondary response-upload-button" disabled>Upload</a>
+            </div>
+
+
         </div>
+        <div class="spinner"></div>
         <?php
 
     }

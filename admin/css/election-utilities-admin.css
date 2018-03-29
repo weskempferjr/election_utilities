@@ -24,3 +24,20 @@
 .alert-info {
     color: #000000;
 }
+
+#response-file-upload {
+    display: none;
+}
+
+
+.spinner {
+    background: url('/wp-admin/images/spinner-2x.gif') no-repeat;
+    background-size: 16px 16px;
+    display: none;
+    float: none;
+    opacity: 1;
+    width: 20px;
+    height: 20px;
+    margin: auto;
+    visibility: visible;
+}

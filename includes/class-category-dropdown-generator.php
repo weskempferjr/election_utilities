@@ -9,7 +9,7 @@
 class Category_Dropdown_Generator {
 
 
-	public function get_child_categories( $parent, $depth, $id = 'cat' ) {
+	public function get_child_categories( $parent, $depth, $id = 'cat', $none_selected = 'Select one' ) {
 
 		$dropdown =  wp_dropdown_categories( array(
 			'hide_empty' => 0,
@@ -17,7 +17,8 @@ class Category_Dropdown_Generator {
 			'hierarchical' => true,
 			'depth' => $depth,
 			'echo' => 0,
-			'id' => $id
+			'id' => $id,
+			'show_option_none' => $none_selected
 		) );
 
 		return $dropdown ;
