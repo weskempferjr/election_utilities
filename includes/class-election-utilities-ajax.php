@@ -24,7 +24,7 @@ class Election_Utilities_Ajax_Controller
                 case 'upload_categories':
                     // If  not set, consider it an invalid request.
                     if ( !isset( $_FILES ) ) {
-	                        throw new Exception(_e('Invalid upload categories request.', ELECTION_UTILITIES_TEXTDOMAIN ) );
+	                        throw new Exception(__('Invalid upload categories request.', ELECTION_UTILITIES_TEXTDOMAIN ) );
                     }
 
 	                $posted_data =  isset( $_POST ) ? $_POST : array();
@@ -44,7 +44,7 @@ class Election_Utilities_Ajax_Controller
                 case 'upload_questionnaire_responses';
 
 	                if ( !isset( $_REQUEST['parentID'] ) || !isset( $_FILES ) ) {
-		                throw new Exception(_e('Invalid get category dropdown request', ELECTION_UTILITIES_TEXTDOMAIN ) );
+		                throw new Exception(__('Invalid get category dropdown request', ELECTION_UTILITIES_TEXTDOMAIN ) );
 	                }
 
 	                $posted_data =  isset( $_POST ) ? $_POST : array();
@@ -64,11 +64,19 @@ class Election_Utilities_Ajax_Controller
 
 	            case 'get_child_category_dropdown':
 		            if ( !isset( $_REQUEST['parentID'] )   ) {
-			            throw new Exception(_e('Invalid get category dropdown request', ELECTION_UTILITIES_TEXTDOMAIN ) );
+			            throw new Exception(__('Invalid get category dropdown request', ELECTION_UTILITIES_TEXTDOMAIN ) );
 		            }
 
 					$output = $this->get_child_category_dropdown( $_REQUEST['parentID'] );
                     break;
+
+	            case 'fetch_election_overview':
+		            if ( !isset( $_REQUEST['viewParameters'] )   ) {
+			            throw new Exception(__('Invalid get fetch election overview request', ELECTION_UTILITIES_TEXTDOMAIN ) );
+		            }
+					$output = $this->fetch_election_overview();
+
+	            	break;
 
                 default:
                     $output = __('Unknown ajax request sent from client.', ELECTION_UTILITIES_TEXTDOMAIN );
@@ -136,6 +144,14 @@ class Election_Utilities_Ajax_Controller
     private function upload_questionnaire_responses( $data ) {
 		$uploader = new Response_Uploader( $data );
 		return $uploader->handle_upload();
+    }
+
+    private function fetch_election_overview ( ) {
+
+		// Sanitize data
+	    $view_parameters = json_decode( stripslashes($_REQUEST['viewParameters']), true, 10 ) ;
+	    $eo = new Election_Overview();
+	    return $eo->fetch( $view_parameters );
     }
 
 

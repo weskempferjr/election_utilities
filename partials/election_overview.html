@@ -1,5 +1,18 @@
-<div class="flex-container">
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>
+<div id="election-overview-container"  class="container">
+    <div id="election-header-row" class="row overview-header-row">
+        <div class="election-overview-header">
+            <h3> {{ electionOverview.title }}</h3>
+            <p> {{ electionOverview.description }}</p>
+        </div>
+    </div>
+    <div class="row ballot-contest-container">
+        <div ng-repeat="ballotContest in electionOverview.ballotContests | orderBy:true:'ballotContest.order'">
+            <div class="clearfix" ng-if="$index % 2 == 0"></div>
+            <div class="col-md-6" class="overview-card">
+                <h4>{{ ballotContest.title }}</h4>
+                <p>{{ ballotContest.description }}</p>
+                <a href="{{ ballotContest.contestURL }}">Learn More</a>
+            </div>
+        </div>
+    </div>
 </div>

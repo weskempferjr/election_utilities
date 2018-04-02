@@ -1,0 +1,26 @@
+{
+  "name": "pad-child",
+  "version": "1.0.0",
+  "description": "PAD Child Theme for OregonPEN",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wes Kempfer",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0"
+  },
+  "dependencies": {
+    "angular-animate": "^1.6.2",
+    "angular-resource": "^1.6.2",
+    "angular-route": "^1.6.2",
+    "angular-sanitize": "^1.6.2",
+    "angular-spinner": "^1.0.1",
+    "angular-ui-bootstrap": "^2.5.0",
+    "angular-ui-router": "^0.4.2"
+  }
+}

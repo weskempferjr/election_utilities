@@ -154,6 +154,11 @@ class Election_Utilities {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-election-utilities-shortcodes.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-election-utilities-election-overview.php';
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-election-utilities-page-manager.php';
+
+
 
 		$this->loader = new Election_Utilities_Loader();
 
@@ -194,6 +199,17 @@ class Election_Utilities {
 		$settings = new Election_Utilities_Settings();
 		$this->loader->add_action('admin_menu',  $settings, 'add_options_page');
 		$this->loader->add_action('admin_init',  $settings, 'settings_init');
+
+
+		$page_manager = new Election_Utilities_Page_Manager();
+
+		$this->loader->add_action('init', $page_manager, 'create_contest_page');
+		$this->loader->add_action('init', $page_manager, 'create_compare_page');
+		$this->loader->add_action('init', $page_manager, 'add_rewrite_tags');
+		$this->loader->add_action('init', $page_manager, 'add_rewrite_rules');
+		$this->loader->add_filter('the_content', $page_manager, 'display_contest_page');
+		$this->loader->add_filter('the_content', $page_manager, 'display_compare_page');
+		$this->loader->add_filter('query_vars', $page_manager, 'add_query_vars');
 
 	}
 

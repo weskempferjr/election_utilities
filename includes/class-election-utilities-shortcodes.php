@@ -36,16 +36,18 @@ class Election_Utilities_Shortcodes
 
         extract( $atts_actual );
 
-        $output = file_get_contents(  plugin_dir_path( dirname( __FILE__ ) ) . 'partials/election_overview.html' );
-        
+        // $output = file_get_contents(  plugin_dir_path( dirname( __FILE__ ) ) . 'partials/election_overview.html' );
 
+	    $output = '<div ng-app="electionUtilitiesApp" ng-init="electionID=' . $id . '">
+    					<div ng-view></div>
+					</div>';
         return $output ;
 
     }
 
 
     public function get_shortcodes() {
-        return array('election_notices');
+        return array('election_overview');
     }
 
 
@@ -59,7 +61,7 @@ class Election_Utilities_Shortcodes
 		$post_type = get_post_type();
 
 		$has_shortcodes = false;
-		$shortcodes = new Public_Notices_Shortcodes();
+		$shortcodes = new Election_Utilities_Shortcodes();
 
 		if ( $post_type == "post"|| $post_type == "page" ) {
 

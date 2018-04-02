@@ -48,6 +48,27 @@ if (!defined('ELECTION_UTILITIES_TEXTDOMAIN'))
 if (!defined('ELECTION_UTILITIES_OPTIONS_NAME'))
 	define('ELECTION_UTILITIES_OPTIONS_NAME', 'election_utilities_options');
 
+if (!defined('ELECTION_UTILITIES_CONTEST_PAGE_SLUG'))
+	define('ELECTION_UTILITIES_CONTEST_PAGE_SLUG', 'ballot-contest');
+
+if (!defined('ELECTION_UTILITIES_CONTEST_PAGE_TITLE'))
+	define('ELECTION_UTILITIES_CONTEST_PAGE_TITLE', 'Ballot Contest');
+
+if (!defined('ELECTION_UTILITIES_COMPARE_PAGE_SLUG'))
+	define('ELECTION_UTILITIES_COMPARE_PAGE_SLUG', 'compare-options');
+
+if (!defined('ELECTION_UTILITIES_COMPARE_PAGE_TITLE'))
+	define('ELECTION_UTILITIES_COMPARE_PAGE_TITLE', 'Compare Options');
+
+if (!defined('ELECTION_UTILITIES_CONTEST_ID_VAR')) {
+	define('ELECTION_UTILITIES_CONTEST_ID_VAR', 'ballot-contest-id');
+}
+
+if (!defined('ELECTION_UTILITIES_CONTEST_SLUG_VAR')) {
+	define('ELECTION_UTILITIES_CONTEST_SLUG_VAR', 'ballot-contest-slug');
+}
+
+
 
 /**
  * The code that runs during plugin activation.

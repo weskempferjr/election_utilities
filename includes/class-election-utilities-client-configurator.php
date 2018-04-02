@@ -24,7 +24,7 @@ class Election_Utilities_Client_Configurator {
 				'enableDebug' => (WP_DEBUG !== false) ? true : false,
 				'env'         => defined('WP_ENV') ? WP_ENV : 'production',
 				'modules'     => array(
-					'electionUtilies' => array(
+					'electionUtilities' => array(
 						'l10n' =>  array(
 							'placeHolder' => __( 'Placeholder', ELECTION_UTILITIES_TEXTDOMAIN),
 						),
@@ -32,6 +32,7 @@ class Election_Utilities_Client_Configurator {
 						'partialUrl' => plugin_dir_url( dirname(__FILE__ ) ) . 'partials/', //Template html url
 						'resourceRoot' => plugin_dir_url( dirname(__FILE__ )  ) . '/',
 						'localizations' => $this->get_localizations(),
+						'electionOverviewSlug' => 'election-overview'
 					)
 				)
 			)

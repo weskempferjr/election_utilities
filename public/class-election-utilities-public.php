@@ -73,7 +73,34 @@ class Election_Utilities_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/election-utilities-public.css', array(), $this->version, 'all' );
+
+		$shortcodes = new Election_Utilities_Shortcodes();
+		if ( ! $shortcodes->has_shortcodes() ) {
+			return;
+		}
+
+
+		wp_enqueue_style( $this->plugin_name . '-bootstrap',
+			plugin_dir_url( __FILE__ ) . 'css/bootstrap.css',
+			wp_get_theme()->get('Version'),
+			false
+		);
+
+		wp_enqueue_style( $this->plugin_name . '-bootstrap-theme',
+			plugin_dir_url( __FILE__ ) . 'css/bootstrap-theme.css',
+			array($this->plugin_name . '-bootstrap'),
+			wp_get_theme()->get('Version'),
+			false
+		);
+
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/election-utilities-public.css',
+			array(),
+			$this->version,
+			'all'
+		);
+
+
+
 
 	}
 
@@ -96,7 +123,119 @@ class Election_Utilities_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/election-utilities-public.js', array( 'jquery' ), $this->version, false );
+		// Enqueue only if necessary.
+
+		$shortcodes = new Election_Utilities_Shortcodes();
+		if ( ! $shortcodes->has_shortcodes() ) {
+			return;
+		}
+
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/election-utilities-public.js',
+			array( 'jquery' ),
+			$this->version,
+			false
+		);
+
+		/*
+	    * Bootstrap
+	    */
+		wp_enqueue_script( $this->plugin_name . '-bootstrap',
+			plugin_dir_url( __FILE__ ) . '/js/bootstrap.js',
+			array('jquery'),
+			$this->version,
+			true
+		);
+
+
+		// TODO: configure support for minified files in production env
+		$child_ng = $this->plugin_name . '-ng';
+
+		wp_enqueue_script( $child_ng,
+			plugin_dir_url( __FILE__ ) . '/js/angular.js',
+			array('jquery'),
+			$this->version,
+			true
+		);
+
+
+
+		wp_enqueue_script( $this->plugin_name . '-ng-route',
+			plugin_dir_url( __FILE__ ) . '/js/angular-route.js',
+			array('jquery', $child_ng),
+			$this->version,
+			true
+		);
+
+		wp_enqueue_script( $this->plugin_name . '-ng-animate',
+			plugin_dir_url( __FILE__ ) . '/js/angular-animate.js',
+			array('jquery', $child_ng),
+			$this->version,
+			true
+		);
+
+
+
+		wp_enqueue_script( $this->plugin_name . '-ng-sanitize',
+			plugin_dir_url( __FILE__ ) . '/js/angular-sanitize.js',
+			array('jquery', $child_ng),
+			$this->version,
+			true
+		);
+
+		wp_enqueue_script( $this->plugin_name . '-ng-resource',
+			plugin_dir_url( __FILE__ ) . '/js/angular-resource.js',
+			array('jquery', $child_ng),
+			$this->version,
+			true
+		);
+
+		wp_enqueue_script( $this->plugin_name . '-ng-ui-router',
+			plugin_dir_url( __FILE__ ) . '/js/angular-ui-router.js',
+			array('jquery', $child_ng),
+			$this->version,
+			true
+		);
+
+		wp_enqueue_script( $this->plugin_name . '-ng-infinite-scroll',
+			plugin_dir_url( __FILE__ ) . '/js/ng-infinite-scroll.min.js',
+			array('jquery', $child_ng),
+			$this->version,
+			true
+		);
+
+		//add for spinner
+		wp_enqueue_script( $this->plugin_name . '-ng-spinner',
+			plugin_dir_url( __FILE__ ) . '/js/angular-spinner.js',
+			array('jquery', $child_ng),
+			$this->version,
+			true
+		);
+
+		wp_enqueue_script( $this->plugin_name . '-ng-ui-bootstrap',
+			plugin_dir_url( __FILE__ ) . '/js/ui-bootstrap.js',
+			array('jquery', $child_ng),
+			$this->version,
+			true
+		);
+
+		wp_enqueue_script( $this->plugin_name . '-ng-ui-bootstrap-tpls',
+			plugin_dir_url( __FILE__ ) . '/js/ui-bootstrap-tpls.js',
+			array('jquery', $child_ng),
+			$this->version,
+			true
+		);
+
+		$public_notices_js_handle = $this->plugin_name . '-ng-app';
+
+		wp_enqueue_script( $public_notices_js_handle,
+			plugin_dir_url( __FILE__ ) . '/js/election-utilities-ng.js',
+			array('jquery',$child_ng),
+			null,
+			true
+		);
+
+		$client_config = new Election_Utilities_Client_Configurator();
+		$client_config->configure_js_globals( $public_notices_js_handle );
 
 	}
 
