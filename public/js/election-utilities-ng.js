@@ -45,6 +45,7 @@
 
                     $scope.electionOverview.viewParameters = '';
 
+
                     // End initilization
 
 
@@ -140,10 +141,13 @@
                     // Start initilization
                     $scope.ballotContest = this;
                     $scope.ballotContest.request = {};
-                    $scope.ballotContest.request.id = $scope.$parent.ballotContestID
+                    $scope.ballotContest.request.id = $scope.$parent.ballotContestID;
 
 
                     $scope.ballotContest.viewParameters = '';
+
+                    $scope.ballotContest.controlMessage = 'Choose 2 candidates below to compare side by side';
+                    $scope.ballotContest.selectCount = 0;
 
                     // End initilization
 
@@ -176,11 +180,17 @@
                                     $scope.ballotContest.description = data.data.description;
                                     $scope.ballotContest.contestants = data.data.contestants;
 
+                                    angular.forEach( $scope.ballotContest.contestants,function( contestant ) {
+                                        contestant.selected = false;
+                                    });
+
                                     angular.forEach(data.data.questions, function (question) {
                                         question.visible = true;
                                         question.listAsCollapsed = true;
                                         dataArray.splice(0, 0, question );
                                     });
+
+
 
 
                                     // Default sort order
@@ -209,6 +219,31 @@
 
 
                     $scope.ballotContest.hideBallotContest = function() {
+
+                    }
+
+                    $scope.ballotContest.updateSelectorControl = function (){
+                        var count = 0;
+                        var message = '';
+                        angular.forEach( $scope.ballotContest.contestants, function ( contestant ){
+                            if ( contestant.selected ) count++;
+                        });
+
+                        if ( count < 1 ) {
+                            message = 'Choose 2 candidates below to compare side by side';
+                        }
+                        else if ( count == 1 ) {
+                            message = 'Choose 1 more candidate to compare side by side';
+                        }
+                        else if ( count == 2 ) {
+                            message = 'Click the button to compare the 2 selected candidates';
+                        }
+                        else {
+                            message = 'Side by side camparison is limited to 2 candidates';
+                        }
+
+                        $scope.ballotContest.controlMessage = message;
+                        $scope.ballotContest.selectCount = count;
 
                     }
                     // End controller methods

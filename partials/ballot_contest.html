@@ -5,17 +5,24 @@
             <p>{{ ballotContest.description }}</p>
         </div>
     </div>
+    <div id="ballot-contest-control" class="row ballot-contest-control">
+        <p id="ballot-contest-control-messasge">{{ ballotContest.controlMessage }}</p>
+        <input type="button" value="Compare" ng-disabled="ballotContest.selectCount != 2">
+    </div>
     <div class="row contestant-list-container">
         <div ng-repeat="contestant in ballotContest.contestants">
-            <div class="col-md-12" class="contestant-container">
+            <div id="contestant-container-{{ $index }}" class="col-md-12 contestant-container" >
                 <div class="row contestant-header">
                     <div class="contestant-thumbnail col-sm-2">
                         <span ng-bind-html="contestant.avatar"></span>
                     </div>
                     <div class="contestant-name col-sm-10">
                         <div class="contestant-nav">
-                            <a href="#">View Quesionnaire</a>
-                            <p>X</p>
+                            <a class="view-questionnaire-button" >View Quesionnaire</a>
+                            <div class="compare-control">
+                                <label for="compare-check-{{ $index }}">Check to compare</label>
+                                <input id="compare-check-{{ $index }}" type="checkbox" ng-model="contestant.selected" ng-click="ballotContest.updateSelectorControl()">
+                            </div>
                         </div>
                         <h4>{{ contestant.displayName }} PARTY</h4>
                     </div>
@@ -29,6 +36,16 @@
                     <h6>Campaign Website:</h6>
                     <h6>Campaign Email:</h6>
                     <h6>Campaign Phone Number:</h6>
+                </div>
+                <div class="row contestant-responses">
+                    <div ng-repeat="question in ballotContest.questions">
+                        <h5>{{ question.title }}</h5>
+                        <div ng-repeat="response in question.responses">
+                            <div class="response-container" ng-if="response.author == contestant.ID">
+                                {{ response.content }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
