@@ -325,21 +325,21 @@
         };
     });
 
-    app.directive('ballotContestDetail', [ '$sce', '$timeout', function ( $sce, $timeout) {
+    app.directive('contestantDetail', [ '$sce', '$timeout', function ( $sce, $timeout) {
         return {
             restrict: 'E',
             replace: true,
             scope: {
-                ballotContest: '=ballotContest',
-                electionOverview: '='
+                contestant: '=contestant',
+                ballotContest: '='
             },
             link: function (scope, elem, attrs) {
                 scope.close = function() {
-                    scope.ballotContest.listAsCollapsed = true;
+                    scope.contestant.listAsCollapsed = true;
                 }
 
             },
-            templateUrl: wpNg.config.modules.electionUtilities.partialUrl + 'ballot-contest-detail.html'
+            templateUrl: wpNg.config.modules.electionUtilities.partialUrl + 'contestant_detail.html'
 
         };
     }]);

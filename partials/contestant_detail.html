@@ -1,0 +1,39 @@
+<div class="contestant-detail-container">
+    <div class="row contestant-header">
+        <div class="contestant-thumbnail col-sm-2">
+            <span ng-bind-html="contestant.avatar"></span>
+        </div>
+        <div class="contestant-name col-sm-10">
+            <div class="contestant-nav">
+                <a class="view-questionnaire-button" >View Quesionnaire</a>
+                <div class="compare-control">
+                    <label for="compare-check-{{ $index }}">Check to compare</label>
+                    <input id="compare-check-{{ $index }}" type="checkbox" ng-model="contestant.selected" ng-click="ballotContest.updateSelectorControl()">
+                </div>
+            </div>
+            <h4>{{ contestant.displayName }} PARTY</h4>
+        </div>
+    </div>
+    <div class="contestant-detail">
+        <div class="contestant-info">
+            <h5>Experience</h5>
+            <h6>Education:</h6>
+            <h6>Current Occupation:</h6>
+            <h6>Public Service:</h6>
+            <h6>Campaign Address:</h6>
+            <h6>Campaign Website:</h6>
+            <h6>Campaign Email:</h6>
+            <h6>Campaign Phone Number:</h6>
+        </div>
+        <div class="contestant-responses">
+            <div ng-repeat="question in ballotContest.questions">
+                <h5>{{ question.title }}</h5>
+                <div ng-repeat="response in question.responses">
+                    <div class="response-container" ng-if="response.author == contestant.ID">
+                        {{ response.content }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
