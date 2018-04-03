@@ -7,9 +7,7 @@ class Election_Utilities_Shortcodes
 {
 
 
-    /**
-     * Public_Notices_Shortcodes constructor.
-     */
+
     public function __construct()
     {
         
@@ -18,6 +16,8 @@ class Election_Utilities_Shortcodes
     
     public function register() {
         add_shortcode('election_overview', array( $this, 'election_overview'));
+	    add_shortcode('ballot_contest', array( $this, 'ballot_contest'));
+
     }
 
 
@@ -45,9 +45,32 @@ class Election_Utilities_Shortcodes
 
     }
 
+	public function ballot_contest( $atts, $content  ) {
+
+		/** @var  $id */
+		/** @var  $template */
+
+		$atts_actual = shortcode_atts(
+			array(
+				'id'          => '',
+				'template'    => ''
+			),
+			$atts );
+
+
+		extract( $atts_actual );
+
+
+		$output = '<div ng-app="electionUtilitiesApp" ng-init="ballotContestID=' . $id . '">
+    					<div ng-view></div>
+					</div>';
+		return $output ;
+
+	}
+
 
     public function get_shortcodes() {
-        return array('election_overview');
+        return array('election_overview', 'ballot_contest');
     }
 
 
@@ -57,6 +80,11 @@ class Election_Utilities_Shortcodes
 		global $post;
 
 		if ( $post == null ) return;
+
+		// This will function will be called on the contest page which has no content at this point.
+		if ( $post->post_name == ELECTION_UTILITIES_CONTEST_PAGE_SLUG ) {
+			return true;
+		}
 
 		$post_type = get_post_type();
 

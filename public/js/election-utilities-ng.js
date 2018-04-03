@@ -21,10 +21,14 @@
                     templateUrl: wpNg.config.modules.electionUtilities.partialUrl + 'election_overview.html',
                     controller: 'electionOverviewController',
                     controllerAs: 'electionOverview'
+                })
+                .when('/' + wpNg.config.modules.electionUtilities.ballotContestSlug + '/', {
+                    templateUrl: wpNg.config.modules.electionUtilities.partialUrl + 'ballot_contest.html',
+                    controller: 'ballotContestController',
+                    controllerAs: 'ballotContest'
                 });
 
-
-
+        
         })
              
                
@@ -127,7 +131,94 @@
                     $scope.electionOverview.fetchElectionOverview();
 
 
-                }]);
+        }])
+        .controller('ballotContestController',
+
+            ['$scope', '$route', '$routeParams', '$location', '$uibModal', 'electionOverviewService','$sce', 'usSpinnerService', '$interval',
+                function ($scope, $route, $routeParams, $location, $uibModal, electionOverviewService, $sce, usSpinnerService, $interval ) {
+
+                    // Start initilization
+                    $scope.ballotContest = this;
+                    $scope.ballotContest.request = {};
+                    $scope.ballotContest.request.id = $scope.$parent.ballotContestID
+
+
+                    $scope.ballotContest.viewParameters = '';
+
+                    // End initilization
+
+
+                    $scope.ballotContest.fetchBallotContest = function () {
+
+                        if (($scope.ballotContest.loadInProgress === true)) {
+                            return;
+                        }
+
+                        $scope.ballotContest.loadInProgress = true;
+
+                        electionOverviewService.fetchBallotContest($scope)
+                            .then(function (data) {
+
+
+                                if (data.data.errorData != null && data.data.errorData == "true") {
+                                    $scope.ballotContest.errorMessage = data.errorMessage;
+                                    $scope.ballotContest.errorContainerClass = "displayed-section";
+                                    // Set loadInProgress to true in order to prevent the infinite scroll module from thrashing.
+                                    //$scope.publicNoticeSearch.loadInProgress = true;
+                                    console.log("Fetch of ballot contest from server failed.");
+                                }
+                                else {
+                                    // If the server has no more records, it won't return any. Disable infinite scroll in that case.
+                                    // Notice Factory
+                                    var dataArray = [];
+                                    // $scope.ballotContest.serverRecordCount = data.data.record_count ;
+                                    $scope.ballotContest.title = data.data.title ;
+                                    $scope.ballotContest.description = data.data.description;
+                                    $scope.ballotContest.contestants = data.data.contestants;
+
+                                    angular.forEach(data.data.questions, function (question) {
+                                        question.visible = true;
+                                        question.listAsCollapsed = true;
+                                        dataArray.splice(0, 0, question );
+                                    });
+
+
+                                    // Default sort order
+                                    // TODO: order should be determined by post date of questionnaire.
+                                    if (dataArray.length > 1) {
+                                        dataArray.sort(function (a, b) {
+                                            return a.order - b.order;
+                                        })
+                                    }
+
+
+                                    // $scope.ballotContest.filterNotices();
+
+                                    $scope.ballotContest.questions = dataArray;
+
+                                    $scope.ballotContest.loadInProgress = false;
+
+
+                                }
+
+                            }, function (data) {
+                                console.log('Error on notice search');
+                                $scope.ballotContest.loadInProgress = false;
+                            });
+                    }
+
+
+                    $scope.ballotContest.hideBallotContest = function() {
+
+                    }
+                    // End controller methods
+
+
+                    // Get ballot contest for display
+                    $scope.ballotContest.fetchBallotContest();
+
+
+        }]);
 
     app.factory('electionOverviewService', function ($q, $http, $location) {
         'use strict';
@@ -155,7 +246,30 @@
             return deferred.promise;
         };
 
+        service.fetchBallotContest = function ($scope) {
+
+            var deferred = $q.defer();
+
+            $http({
+                method: 'GET',
+                url: wpNg.config.ajaxUrl,
+                params: {
+                    'action': 'election_utilities_ajax',
+                    'fn': 'fetch_ballot_contest',
+                    'viewParameters': $scope.ballotContest.request
+                }
+
+            })
+                .then(function (data) {
+                    deferred.resolve(data);
+                }) ,(function (data) {
+                deferred.reject('There was an error fetching ballot contest!');
+            });
+            return deferred.promise;
+        };
+
         return service;
+
     });
 
 

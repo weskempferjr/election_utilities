@@ -32,7 +32,8 @@ class Election_Utilities_Client_Configurator {
 						'partialUrl' => plugin_dir_url( dirname(__FILE__ ) ) . 'partials/', //Template html url
 						'resourceRoot' => plugin_dir_url( dirname(__FILE__ )  ) . '/',
 						'localizations' => $this->get_localizations(),
-						'electionOverviewSlug' => 'election-overview'
+						'electionOverviewSlug' => 'election-overview',
+						'ballotContestSlug' => 'ballot-contest'
 					)
 				)
 			)

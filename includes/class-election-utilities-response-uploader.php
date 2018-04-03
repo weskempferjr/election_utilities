@@ -57,7 +57,13 @@ class Response_Uploader extends  File_Uploader {
 			}
 		}
 
-		$pi_manager = new Personal_Info_Manager( $personal_info );
+
+		$parent_cat = $this->__data['parentID'];
+
+		$personal_info['ballot_contest_ID'] = $parent_cat ;
+
+		$pi_manager = new Personal_Info_Manager();
+		$pi_manager->set_personal_info( $personal_info );
 		$user_id = $pi_manager->update();
 
 
@@ -65,7 +71,6 @@ class Response_Uploader extends  File_Uploader {
 		// For each question (key), create a category if it does not exists.
 		// For each question response (value), create a new post and assign it to the question category
 
-		$parent_cat = $this->__data['parentID'];
 
 
 		/*

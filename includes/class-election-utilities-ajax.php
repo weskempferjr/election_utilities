@@ -78,6 +78,15 @@ class Election_Utilities_Ajax_Controller
 
 	            	break;
 
+
+	            case 'fetch_ballot_contest':
+		            if ( !isset( $_REQUEST['viewParameters'] )   ) {
+			            throw new Exception(__('Invalid get fetch ballot contest request', ELECTION_UTILITIES_TEXTDOMAIN ) );
+		            }
+		            $output = $this->fetch_ballot_contest();
+
+		            break;
+
                 default:
                     $output = __('Unknown ajax request sent from client.', ELECTION_UTILITIES_TEXTDOMAIN );
                     break;
@@ -153,6 +162,15 @@ class Election_Utilities_Ajax_Controller
 	    $eo = new Election_Overview();
 	    return $eo->fetch( $view_parameters );
     }
+
+	private function fetch_ballot_contest ( ) {
+
+		// TODO: Sanitize data
+		$view_parameters = json_decode( stripslashes($_REQUEST['viewParameters']), true, 10 ) ;
+		$bc = new Ballot_Contest();
+		return $bc->fetch( $view_parameters );
+	}
+
 
 
 }

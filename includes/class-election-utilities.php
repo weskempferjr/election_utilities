@@ -158,6 +158,15 @@ class Election_Utilities {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-election-utilities-page-manager.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-election-utilities-ballot-contest.php';
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-election-utilities-question.php';
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-election-utilities-response.php';
+
+
+
+
 
 
 		$this->loader = new Election_Utilities_Loader();

@@ -1,0 +1,36 @@
+<div id="ballot-contest-container" class="container">
+    <div id="ballot-contest-header-row" class="row ballot-contest-header-row">
+        <div class="ballot-contest-header">
+            <h3>{{  ballotContest.title }}</h3>
+            <p>{{ ballotContest.description }}</p>
+        </div>
+    </div>
+    <div class="row contestant-list-container">
+        <div ng-repeat="contestant in ballotContest.contestants">
+            <div class="col-md-12" class="contestant-container">
+                <div class="row contestant-header">
+                    <div class="contestant-thumbnail col-sm-2">
+                        <span ng-bind-html="contestant.avatar"></span>
+                    </div>
+                    <div class="contestant-name col-sm-10">
+                        <div class="contestant-nav">
+                            <a href="#">View Quesionnaire</a>
+                            <p>X</p>
+                        </div>
+                        <h4>{{ contestant.displayName }} PARTY</h4>
+                    </div>
+                </div>
+                <div class="row contestant-info">
+                    <h5>Experience</h5>
+                    <h6>Education:</h6>
+                    <h6>Current Occupation:</h6>
+                    <h6>Public Service:</h6>
+                    <h6>Campaign Address:</h6>
+                    <h6>Campaign Website:</h6>
+                    <h6>Campaign Email:</h6>
+                    <h6>Campaign Phone Number:</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
