@@ -1,0 +1,11 @@
+<div id="ballot-contest-compare-container" class="compare-container">
+    <div id="ballot-contest-campare-row" class="compare-row row">
+        <div class="modal-header">
+            <button class="close" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h3 class="text-center">{{  ballotContest.title }}</h3>
+        </div>
+        <div ng-repeat="contestant in ballotContest.contestants" class="col-md-6 contestant-compare">
+            <contestant-detail ballot-contest="ballotContest" contestant="contestant" ng-if="contestant.selected"></contestant-detail>
+        </div>
+    </div>
+</div>

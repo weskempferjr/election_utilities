@@ -34,6 +34,7 @@ class Election_Utilities_Client_Configurator {
 						'localizations' => $this->get_localizations(),
 						'electionOverviewSlug' => 'election-overview',
 						'ballotContestSlug' => 'ballot-contest'
+
 					)
 				)
 			)

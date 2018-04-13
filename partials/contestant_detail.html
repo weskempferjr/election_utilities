@@ -1,10 +1,10 @@
 <div class="contestant-detail-container">
-    <div class="row contestant-header">
-        <div class="contestant-thumbnail col-sm-2">
+    <div class="row contestant-header" >
+        <div class="contestant-thumbnail">
             <span ng-bind-html="contestant.avatar"></span>
         </div>
-        <div class="contestant-name col-sm-10">
-            <div class="contestant-nav">
+        <div class="contestant-name">
+            <div class="contestant-nav" ng-if="ballotContest.enableContestantNav">
                 <a class="view-questionnaire-button" >View Quesionnaire</a>
                 <div class="compare-control">
                     <label for="compare-check-{{ $index }}">Check to compare</label>
@@ -13,8 +13,9 @@
             </div>
             <h4>{{ contestant.displayName }} PARTY</h4>
         </div>
+        <div class="contest-detail-toggle" ng-click="contestant.listAsCollapsed = !contestant.listAsCollapsed" ng-if="ballotContest.enableContestantNav"><i class="fa fa-angle-down" ng-if="contestant.listAsCollapsed"></i><i class="fa fa-angle-up" ng-if="!contestant.listAsCollapsed"></i></div>
     </div>
-    <div class="contestant-detail">
+    <div class="contestant-detail" uib-collapse="ballotContest.detailIsCollapsed( contestant )">
         <div class="contestant-info">
             <h5>Experience</h5>
             <h6>Education:</h6>
@@ -34,6 +35,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div>
+            <p>
+                Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus nibh. Nulla quis lorem ut libero malesuada feugiat.
+
+                Vivamus suscipit tortor eget felis porttitor volutpat. Donec sollicitudin molestie malesuada. Donec sollicitudin molestie malesuada.
+
+                Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec sollicitudin molestie malesuada. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.
+            </p>
         </div>
     </div>
 </div>

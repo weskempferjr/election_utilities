@@ -149,6 +149,11 @@
                     $scope.ballotContest.controlMessage = 'Choose 2 candidates below to compare side by side';
                     $scope.ballotContest.selectCount = 0;
 
+                    // Controls display of compare and view questionnaire controls.
+                    $scope.ballotContest.enableContestantNav = true;
+
+                    $scope.ballotContest.compareModalActive = false;
+
                     // End initilization
 
 
@@ -180,9 +185,13 @@
                                     $scope.ballotContest.description = data.data.description;
                                     $scope.ballotContest.contestants = data.data.contestants;
 
+                                    var cIndex = 0;
                                     angular.forEach( $scope.ballotContest.contestants,function( contestant ) {
                                         contestant.selected = false;
+                                        contestant.listAsCollapsed = cIndex == 0 ? false : true ;
+                                        cIndex++;
                                     });
+
 
                                     angular.forEach(data.data.questions, function (question) {
                                         question.visible = true;
@@ -222,6 +231,14 @@
 
                     }
 
+                    $scope.ballotContest.detailIsCollapsed = function(contestant  ) {
+
+                        if ( $scope.ballotContest.compareModalActive && contestant.selected ) {
+                            return false;
+                        }
+                        return contestant.listAsCollapsed;
+                    }
+
                     $scope.ballotContest.updateSelectorControl = function (){
                         var count = 0;
                         var message = '';
@@ -246,11 +263,37 @@
                         $scope.ballotContest.selectCount = count;
 
                     }
+
+                    $scope.ballotContest.displayCompareModal = function() {
+
+                        $scope.ballotContest.enableContestantNav = false;
+                        $scope.ballotContest.compareModalActive = true;
+
+
+                        var modalInstance;
+
+                        $scope.comparelModal = modalInstance = $uibModal.open({
+                            templateUrl: wpNg.config.modules.electionUtilities.partialUrl + 'candidate_compare.html',
+                            scope: $scope,
+                            size: 'lg',
+                            windowTopClass: 'compare-modal'
+
+                        });
+                        $scope.close = function () {
+                            $scope.ballotContest.enableContestantNav = true;
+                            $scope.ballotContest.compareModalActive = false;
+                            modalInstance.close();
+                        };
+
+                    }
                     // End controller methods
 
 
                     // Get ballot contest for display
                     $scope.ballotContest.fetchBallotContest();
+
+
+
 
 
         }]);

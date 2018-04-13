@@ -14,3 +14,60 @@
     padding: 20px;
     font-size: 30px;
 }
+
+#ballot-contest-compare-container .compare-row {
+    margin-left: 0;
+    margin-right: 0;
+    max-height: 90vh;
+    overflow-y: scroll;
+}
+
+
+.contestant-detail-container {
+    box-sizing: border-box;
+    border: 1px black solid;
+    padding: 15px;
+}
+
+.contestant-thumbnail {
+    float: left;
+    margin-right: 20px;
+}
+
+#ballot-contest-control-message {
+    float: left;
+    margin-left: 20px;
+}
+
+
+.compare-button {
+    float: right;
+    margin-right: 30px;
+    margin-top: 20px;
+}
+
+.contestant-header {
+    position: relative;
+}
+
+.contestant-nav {
+    width: 50%;
+    float: right;
+}
+
+.view-questionnaire-button {
+    float: left;
+}
+
+.compare-control {
+    float: right;
+    margin-right: 55px;
+}
+
+.contest-detail-toggle {
+    font-size: 30px;
+    color: #0a0a0a;
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+}
