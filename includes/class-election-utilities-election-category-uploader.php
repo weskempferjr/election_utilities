@@ -8,6 +8,20 @@
 
 class Election_Category_Uploader extends File_Uploader  {
 
+	private static $election_type_id = 'election';
+	private static $jurisdiction_type_id = 'jurisdiction';
+	private static $jurisdiction_body_type_id = 'jurisdiction_body';
+	private static $office_type_id = 'office';
+	private static $ballot_issue_id = 'ballot_issue';
+
+	const INITIAL_STATE = 'initial';
+	const JURISDICTION_STATE = 'jurisdiction';
+	const JURISDICTION_BODY_STATE ='jurisdiction_body';
+	const CONTEST_STATE = 'contest';
+
+	private $_load_state = self::INITIAL_STATE;
+
+
 
 	public function handle_upload() {
 		$response = array();
@@ -44,8 +58,7 @@ class Election_Category_Uploader extends File_Uploader  {
 		}
 
 		if ( !$root_cat ) {
-			$response['response'] = "FAILURE";
-			return $response;
+			throw new Exception(__('Could not load or root category', ELECTION_UTILITIES_TEXTDOMAIN));
 		}
 
 
@@ -57,16 +70,33 @@ class Election_Category_Uploader extends File_Uploader  {
 		 *  - All other records represent child categories (offices) of the election category.
 		 *  - The first column is the category name
 		 * -  The second column is the category description
-		 * -  The third colunmn is the category type (election, or office)
+		 * -  The third colunmn is the category type (election, jurisdiction, jurisdiction_body, or office)
+		 * -  The category type determines level in the category hiearchy.
+		 *     election is a child of voter guide root
+		 *     jurisdiction is a child of election
+		 *     jurisdiction body is a child of jurisdiction
+		 *     office is a child of jurisdiction_body
 		 */
 
 
 
-		$cat_array = array(
-			'cat_name' => $category_data[1][0],
-			'cat_description' => $category_data[1][1],
-			'category_parent' => $root_cat
-		);
+		/*
+		 * This is the root of the election category. If it is not of type election, bail.
+		 */
+
+		if ( $category_data[1][2] == self::$election_type_id ) {
+			$cat_array = array(
+				'cat_name' => $category_data[1][0],
+				'cat_description' => $category_data[1][1],
+				'category_parent' => $root_cat,
+				'category_type' => self::$election_type_id
+			);
+		}
+		else {
+			throw new Exception(__('Election category not found in file where it was expected', ELECTION_UTILITIES_TEXTDOMAIN));
+		}
+
+
 
 		/*
 		 * See if category exists. If not, create it.
@@ -82,25 +112,104 @@ class Election_Category_Uploader extends File_Uploader  {
 
 		if ( $parent_cat ) {
 
-			for ( $i = 2; $i < count( $category_data) - 2 ; $i++ ) {
-				$cat_array = array(
-					'cat_name' => $category_data[$i][0],
-					'category_description' => $category_data[$i][1],
-					'category_parent' => $parent_cat
-				);
+			$this->_load_state = self::JURISDICTION_STATE ;
 
-				$child_cat = FALSE;
-				$child_term = term_exists( $cat_array['cat_name'], 'category', $parent_cat );
-				if ( ! $child_term ) {
-					$child_cat = wp_insert_category( $cat_array );
-				}
-				else {
-					$child_cat = $child_term['term_id'];
+			$current_parent_cat = $parent_cat;
+
+			for ( $i = 2; $i < count( $category_data ) ; $i++ ) {
+
+				switch ( $this->_load_state) {
+
+					case self::JURISDICTION_STATE:
+
+						if ( $category_data[$i][2] != self::$jurisdiction_type_id ) {
+							throw new Exception(__('Expected jurisdiction record.', ELECTION_UTILITIES_TEXTDOMAIN));
+						}
+
+						$cat_array = array(
+							'cat_name' => $category_data[$i][0],
+							'category_description' => $category_data[$i][1],
+							'category_parent' => $current_parent_cat
+						);
+
+						$child_term = term_exists( $cat_array['cat_name'], 'category', $current_parent_cat );
+						if ( ! $child_term ) {
+							$child_cat = wp_insert_category( $cat_array );
+						}
+						else {
+							$child_cat = $child_term['term_id'];
+						}
+						$this->_load_state = self::JURISDICTION_BODY_STATE;
+						$current_parent_cat = $child_cat;
+
+						break;
+
+
+					case self::JURISDICTION_BODY_STATE:
+
+						if ( $category_data[$i][2] != self::$jurisdiction_body_type_id ) {
+							$this->_load_state = self::JURISDICTION_STATE;
+							$i--;
+							$current_parent_cat = $this->get_parent_category_id( $current_parent_cat);
+							continue;
+						}
+
+						$cat_array = array(
+							'cat_name' => $category_data[$i][0],
+							'category_description' => $category_data[$i][1],
+							'category_parent' => $current_parent_cat
+						);
+
+						$child_term = term_exists( $cat_array['cat_name'], 'category', $current_parent_cat );
+						if ( ! $child_term ) {
+							$child_cat = wp_insert_category( $cat_array );
+						}
+						else {
+							$child_cat = $child_term['term_id'];
+						}
+						$this->_load_state = self::CONTEST_STATE;
+						$current_parent_cat = $child_cat;
+
+						break;
+
+					case self::CONTEST_STATE:
+
+						if ( $category_data[$i][2] != self::$office_type_id ) {
+							$this->_load_state = self::JURISDICTION_BODY_STATE;
+							$i--;
+							$current_parent_cat = $this->get_parent_category_id( $current_parent_cat);
+							continue;
+						}
+
+						$cat_array = array(
+							'cat_name' => $category_data[$i][0],
+							'category_description' => $category_data[$i][1],
+							'category_parent' => $current_parent_cat
+						);
+
+						$child_term = term_exists( $cat_array['cat_name'], 'category', $current_parent_cat );
+						if ( ! $child_term ) {
+							$child_cat = wp_insert_category( $cat_array );
+						}
+						else {
+							$child_cat = $child_term['term_id'];
+						}
+
+						break;
+
+
+					default:
+						throw new Exception(__('Category loader in unknown state.', ELECTION_UTILITIES_TEXTDOMAIN));
 				}
 
 				if ( ! $child_cat ) {
 					error_log(__FILE__ . ':' . __LINE__ . ', Create or find of child category failed' );
 				}
+
+
+
+
+
 
 			}
 
@@ -113,6 +222,11 @@ class Election_Category_Uploader extends File_Uploader  {
 
 
 		return $response;
+	}
+
+	private function get_parent_category_id( $cat_id ) {
+		$cat = get_category(( $cat_id ));
+		return $cat->parent ;
 	}
 
 }
