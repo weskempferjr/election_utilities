@@ -8,16 +8,24 @@
 
 class Election_Category_Uploader extends File_Uploader  {
 
-	private static $election_type_id = 'election';
-	private static $jurisdiction_type_id = 'jurisdiction';
-	private static $jurisdiction_body_type_id = 'jurisdiction_body';
-	private static $office_type_id = 'office';
-	private static $ballot_issue_id = 'ballot_issue';
+	const ELECTION_TYPE = 'election';
+	const JURISDICTION_TYPE = 'jurisdiction';
+	const JURISDICTION_BODY_TYPE ='jurisdiction_body';
+	const OFFICE_TYPE = 'office';
+	const BALLOT_ISSUE_TYPE = 'ballot_issue';
+
+	private static $election_type_id = self::ELECTION_TYPE;
+	private static $jurisdiction_type_id = self::JURISDICTION_TYPE;
+	private static $jurisdiction_body_type_id = self::JURISDICTION_BODY_TYPE;
+	private static $office_type_id = self::OFFICE_TYPE;
+	private static $ballot_issue_type_id = self::BALLOT_ISSUE_TYPE;
 
 	const INITIAL_STATE = 'initial';
 	const JURISDICTION_STATE = 'jurisdiction';
 	const JURISDICTION_BODY_STATE ='jurisdiction_body';
 	const CONTEST_STATE = 'contest';
+
+	const ELECTION_UTILITIES_TYPE_KEY = 'election_utilities_type';
 
 	private $_load_state = self::INITIAL_STATE;
 
@@ -112,6 +120,8 @@ class Election_Category_Uploader extends File_Uploader  {
 
 		if ( $parent_cat ) {
 
+			$this->set_type_id( $parent_cat, self::$election_type_id );
+
 			$this->_load_state = self::JURISDICTION_STATE ;
 
 			$current_parent_cat = $parent_cat;
@@ -139,6 +149,12 @@ class Election_Category_Uploader extends File_Uploader  {
 						else {
 							$child_cat = $child_term['term_id'];
 						}
+
+						if ( ! $child_cat ) {
+							throw new Exception( sprintf(__('Could not create or find category for type in state = %s', ELECTION_UTILITIES_TEXTDOMAIN)), $this->_load_state );
+						}
+
+						$this->set_type_id( $child_cat, self::$jurisdiction_type_id );
 						$this->_load_state = self::JURISDICTION_BODY_STATE;
 						$current_parent_cat = $child_cat;
 
@@ -167,6 +183,12 @@ class Election_Category_Uploader extends File_Uploader  {
 						else {
 							$child_cat = $child_term['term_id'];
 						}
+
+						if ( ! $child_cat ) {
+							throw new Exception( sprintf(__('Could not create or find category for type = %s', ELECTION_UTILITIES_TEXTDOMAIN)), $this->_load_state );
+						}
+
+						$this->set_type_id( $child_cat, self::$jurisdiction_body_type_id );
 						$this->_load_state = self::CONTEST_STATE;
 						$current_parent_cat = $child_cat;
 
@@ -194,6 +216,11 @@ class Election_Category_Uploader extends File_Uploader  {
 						else {
 							$child_cat = $child_term['term_id'];
 						}
+
+						if ( ! $child_cat ) {
+							throw new Exception( sprintf(__('Could not create or find category for type = %s', ELECTION_UTILITIES_TEXTDOMAIN)), $this->_load_state );
+						}
+						$this->set_type_id( $child_cat, self::$office_type_id );
 
 						break;
 
@@ -227,6 +254,11 @@ class Election_Category_Uploader extends File_Uploader  {
 	private function get_parent_category_id( $cat_id ) {
 		$cat = get_category(( $cat_id ));
 		return $cat->parent ;
+	}
+
+	private function set_type_id ( $cat, $type_id ) {
+		$meta_id = update_term_meta( $cat, self::ELECTION_UTILITIES_TYPE_KEY , $type_id );
+		return $meta_id;
 	}
 
 }
