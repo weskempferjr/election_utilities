@@ -26,6 +26,9 @@ class Election_Category_Uploader extends File_Uploader  {
 	const CONTEST_STATE = 'contest';
 
 	const ELECTION_UTILITIES_TYPE_KEY = 'election_utilities_type';
+	const ELECTION_UTILITIES_LINK_URL_KEY = 'external_link_url';
+	const ELECTION_UTILITIES_LINK_TEXT_KEY = 'external_text_url';
+
 
 	private $_load_state = self::INITIAL_STATE;
 
@@ -222,6 +225,12 @@ class Election_Category_Uploader extends File_Uploader  {
 						}
 						$this->set_type_id( $child_cat, self::$office_type_id );
 
+						// If link url is not empty, set the link url and text
+						if ( !empty($category_data[$i][3])  ) {
+							$this->set_link_url( $child_cat, $category_data[$i][3]);
+							$this->set_link_text( $child_cat, $category_data[$i][4]);
+						}
+
 						break;
 
 
@@ -232,9 +241,6 @@ class Election_Category_Uploader extends File_Uploader  {
 				if ( ! $child_cat ) {
 					error_log(__FILE__ . ':' . __LINE__ . ', Create or find of child category failed' );
 				}
-
-
-
 
 
 
@@ -258,6 +264,28 @@ class Election_Category_Uploader extends File_Uploader  {
 
 	private function set_type_id ( $cat, $type_id ) {
 		$meta_id = update_term_meta( $cat, self::ELECTION_UTILITIES_TYPE_KEY , $type_id );
+		return $meta_id;
+	}
+
+	private function set_link_url ( $cat, $link_url ) {
+
+		if ( empty($link_url) ) {
+			return ;
+		}
+		else {
+			$meta_id = update_term_meta( $cat, self::ELECTION_UTILITIES_LINK_URL_KEY , $link_url );
+		}
+		return $meta_id;
+	}
+
+	private function set_link_text ( $cat, $link_text ) {
+
+		if ( empty( $link_text ) ) {
+			$link_text = __('Learn more', ELECTION_UTILITIES_TEXTDOMAIN) ;
+		}
+
+		$meta_id = update_term_meta( $cat, self::ELECTION_UTILITIES_LINK_TEXT_KEY , $link_text );
+
 		return $meta_id;
 	}
 
