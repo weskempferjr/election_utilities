@@ -185,6 +185,10 @@ class Election_Utilities_Settings
 	            }
 	            ?>
             </div>
+            <div id="jurisdiction-dropdown-container" class="eu-dropdown-container">
+            </div>
+            <div id="jurisdiction-body-dropdown-container" class="eu-dropdown-container">
+            </div>
             <div id="office-dropdown-container" class="eu-dropdown-container">
             </div>
 

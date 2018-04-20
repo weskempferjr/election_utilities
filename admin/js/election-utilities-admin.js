@@ -13,7 +13,17 @@
 
         $(document).on('change', '#election-dropdown', function( event ) {
             var catID = $('#election-dropdown').val();
-            getCategoryDropdown( catID, '#office-dropdown-container' );
+            getCategoryDropdown( catID, '#jurisdiction-dropdown-container', 'jurisdiction-dropdown' );
+        });
+
+        $(document).on('change', '#jurisdiction-dropdown', function( event ) {
+            var catID = $('#jurisdiction-dropdown').val();
+            getCategoryDropdown( catID, '#jurisdiction-body-dropdown-container', 'jurisdiction-body-dropdown' );
+        });
+
+        $(document).on('change', '#jurisdiction-body-dropdown', function( event ) {
+            var catID = $('#jurisdiction-body-dropdown').val();
+            getCategoryDropdown( catID, '#office-dropdown-container', 'office-dropdown' );
         });
 
         $(document).on( 'change' ,'#office-dropdown',function( event ) {
@@ -149,7 +159,7 @@
 
 
 
-        function getCategoryDropdown( parentID, targetContainer ) {
+        function getCategoryDropdown( parentID, targetContainer, dropdownElementID ) {
 
             $('.spinner').show();
             $.ajax({
@@ -159,6 +169,7 @@
                     'action':'election_utilities_ajax',
                     'fn':'get_child_category_dropdown',
                     'parentID' : parentID,
+                    'dropdownElementID' : dropdownElementID
                 },
                 dataType: 'json',
                 success: function(data, textStatus, jqXHR) {

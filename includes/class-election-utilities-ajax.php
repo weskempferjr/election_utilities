@@ -63,11 +63,12 @@ class Election_Utilities_Ajax_Controller
 	                break;
 
 	            case 'get_child_category_dropdown':
-		            if ( !isset( $_REQUEST['parentID'] )   ) {
+		            if ( !isset( $_REQUEST['parentID'] ) || !isset( $_REQUEST['dropdownElementID'] ) ) {
 			            throw new Exception(__('Invalid get category dropdown request', ELECTION_UTILITIES_TEXTDOMAIN ) );
 		            }
 
-					$output = $this->get_child_category_dropdown( $_REQUEST['parentID'] );
+		            // TODO: security issue: validate inputs
+					$output = $this->get_child_category_dropdown( $_REQUEST['parentID'], $_REQUEST['dropdownElementID']  );
                     break;
 
 	            case 'fetch_election_overview':
@@ -139,13 +140,13 @@ class Election_Utilities_Ajax_Controller
 		return $uploader->handle_upload();
     }
 
-    private function get_child_category_dropdown ( $parentID ) {
+    private function get_child_category_dropdown ( $parentID, $dropdownElementID ) {
 
 		// Sanitize
 		$cat_id = intval( $parentID);
 
 		$dropdown_generator = new Category_Dropdown_Generator();
-		$dropdown = $dropdown_generator->get_child_categories( $cat_id, 1, 'office-dropdown');
+		$dropdown = $dropdown_generator->get_child_categories( $cat_id, 1, $dropdownElementID );
 		return $dropdown ;
 
     }
