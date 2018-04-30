@@ -6,7 +6,8 @@
         </div>
     </div>
     <div class="row ballot-contest-container">
-        <div ng-repeat="ballotContest in electionOverview.ballotContests | orderBy:true:'ballotContest.order'">
+        <div ng-repeat="ba
+        llotContest in electionOverview.ballotContests | orderBy:true:'ballotContest.order'">
             <div class="clearfix" ng-if="$index % 2 == 0"></div>
             <div class="col-md-6" class="overview-card">
                 <h4>{{ ballotContest.title }}</h4>
