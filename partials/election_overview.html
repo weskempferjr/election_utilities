@@ -5,15 +5,23 @@
             <p> {{ electionOverview.description }}</p>
         </div>
     </div>
-    <div class="row ballot-contest-container">
-        <div ng-repeat="ba
-        llotContest in electionOverview.ballotContests | orderBy:true:'ballotContest.order'">
-            <div class="clearfix" ng-if="$index % 2 == 0"></div>
-            <div class="col-md-6" class="overview-card">
-                <h4>{{ ballotContest.title }}</h4>
-                <p>{{ ballotContest.description }}</p>
-                <a href="{{ ballotContest.contestURL }}">Learn More</a>
-            </div>
+    <div class="col-xs-12">
+        <div class="jurisdiction-container" ng-repeat="jurisdiction in electionOverview.jurisdictions | orderBy:'-jurisdiction.order'">
+            <uib-accordion close-others="true">
+                <div uib-accordion-group class="panel-default" is-open="electionOverview.jurisdictions[ $index ].isOpen"  >
+                    <uib-accordion-heading>
+                        {{ jurisdiction.title }}<i class="pull-right glyphicon" ng-click="electionOverview.toggleJurisdiction( $index )" ng-class="{'glyphicon-chevron-down': !electionOverview.jurisdictions[ $index ].listAsCollapsed, 'glyphicon-chevron-right': electionOverview.jurisdictions[ $index ].listAsCollapsed }"></i>
+                    </uib-accordion-heading>
+                    <div class="jurisdiction-body-container" ng-repeat="jurisdictionBody in jurisdiction.jurisdiction_bodies | orderBy:'-jurisdictionBody.order'">
+                        <h5>{{ jurisdictionBody.title }}</h5>
+                        <p>{{ jurisdictionBody.description }}</p>
+                        <div class="contest-container" ng-repeat="contest in jurisdictionBody.contests | orderBy:'-contest.order'">
+                            <h6>{{ contest.title }}</h6>
+                            <p>{{ contest.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </uib-accordion>
         </div>
     </div>
 </div>

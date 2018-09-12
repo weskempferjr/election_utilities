@@ -28,6 +28,8 @@ class Response_Uploader extends  File_Uploader {
 		 *   Keys (names) for data are in row 0
 		 *   Values for data are in row 1
 		 *   All other rows are ignored.
+		 *
+		 *   TODO: Validate data in file and file format.
 		 */
 
 		$responses = array();

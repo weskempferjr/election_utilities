@@ -42,6 +42,7 @@
                     $scope.electionOverview.request = {};
                     $scope.electionOverview.request.id = $scope.$parent.electionID
 
+                    $scope.electionOverview.jurisdictions = null;
 
                     $scope.electionOverview.viewParameters = '';
 
@@ -90,10 +91,10 @@
                                     $scope.electionOverview.title = data.data.title ;
                                     $scope.electionOverview.description = data.data.description;
 
-                                    angular.forEach(data.data.ballot_contests, function (ballotContest) {
-                                        ballotContest.visible = true;
-                                        ballotContest.listAsCollapsed = true;
-                                        dataArray.splice(0, 0, ballotContest );
+                                    angular.forEach(data.data.jurisdictions, function (jurisdiction) {
+                                        jurisdiction.visible = true;
+                                        jurisdiction.isOpen = false;
+                                        dataArray.splice(0, 0, jurisdiction);
                                     });
 
 
@@ -107,7 +108,7 @@
 
                                     // $scope.electionOverview.filterNotices();
 
-                                    $scope.electionOverview.ballotContests = dataArray;
+                                    $scope.electionOverview.jurisdictions = dataArray;
 
                                     $scope.electionOverview.loadInProgress = false;
 
@@ -124,6 +125,11 @@
                     $scope.electionOverview.hideBallotContest = function() {
                         
                     }
+
+                    $scope.electionOverview.toggleJurisdiction = function( index ) {
+                    }
+
+
                     // End controller methods
 
 
